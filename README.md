@@ -32,6 +32,7 @@ Happy Coding!  🎉
 ### Originals
 
 [Kedasha Kerr/@LadyKerr]
+
 [Chris Reddington/@chrisreddington]
 
 ### Contributors
