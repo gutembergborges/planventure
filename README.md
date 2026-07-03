@@ -26,3 +26,14 @@ Before you begin, ensure you have the following:
 - Git - [Download & Install Git](https://git-scm.com/downloads)
 
 Happy Coding!  🎉
+
+## Authors 👩🏽‍💻
+
+### Originals
+
+[Kedasha Kerr/@LadyKerr]
+[Chris Reddington/@chrisreddington]
+
+### Contributors
+
+[Gutemberg de Almeida Borges/@gutembergborges]
