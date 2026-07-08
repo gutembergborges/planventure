@@ -1,3 +1,7 @@
+## Important Note ❗️
+This repository is a copy of [GitHub Planventure](https://github.com/github-samples/planventure) cloned to my GitHub only for learning objectives.
+Original authors are credited in the footer of this document.
+
 ## Getting Started 👩🏽‍💻
 
 1. Fork this repository to your GitHub account.
@@ -29,11 +33,13 @@ Happy Coding!  🎉
 
 ## Authors 👩🏽‍💻
 
-### Originals
+### Originals - GitHub staff
 
 [Kedasha Kerr/@LadyKerr]
 
 [Chris Reddington/@chrisreddington]
+
+[GitHub](https://github.com/GitHub)
 
 ### Contributors
 
