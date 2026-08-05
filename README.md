@@ -23,28 +23,33 @@ Before you begin, ensure you have the following:
 
 If you prefer to develop locally, follow the steps below:
 
-1.Fork and clone the repository and navigate to the [planventue-api](/planventure-api/) directory:
+1.Fork and clone the repository and navigate to the api-start branch:
 ```sh
-cd planventure-api
+git checkout api-start
 ```
 
 2. Create a virtual environment and activate it:
 ```sh
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. Install the required dependencies:
+3. Navigate to the [planventue-api](/planventure-api/) directory:
+```sh
+cd planventure-api
+```
+
+4. Install the required dependencies:
 ```sh
 pip install -r requirements.txt
 ```
 
-4. Create an `.env` file based on [.sample.env](/planventure-api/.sample.env):
+5. Create an `.env` file based on [.sample.env](/planventure-api/.sample.env):
 ```sh
 cp .sample.env .env
 ```
 
-5. Start the Flask development server:
+6. Start the Flask development server:
 ```sh
 flask run
 ```
