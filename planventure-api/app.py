@@ -20,6 +20,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
 
+# Import models so they are registered with SQLAlchemy before create_all()
+try:
+    from models import User  # noqa: F401
+except Exception:
+    # Import errors may occur during static analysis or early import; ignore at runtime
+    pass
+
 @app.route("/")
 def home():
     return jsonify({"message": "Welcome to PlanVenture API"})
