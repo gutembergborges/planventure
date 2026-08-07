@@ -9,24 +9,31 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
-CORS(app)
-
-# Database configuration
-# app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///planventure.db")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 # Initialize SQLAlchemy
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
-@app.route("/")
-def home():
-    return jsonify({"message": "Welcome to PlanVenture API"})
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
 
-@app.route("/health")
-def health_check():
-    return jsonify({"status": "healthy"})
+    # Database configuration
+    # # app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///planventure.db")
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+    # Initialize extensions
+    db.init_app(app)
+
+    # Register routes
+    @app.route("/")
+    def home():
+        return jsonify({"message": "Welcome to PlanVenture API"})
+
+    #@app.route("/health")
+    #def health_check():
+    #    return jsonify({"status": "healthy"})
+
+    return app
 
 # @app.route("/db-health")
 # def db_health():
@@ -37,14 +44,6 @@ def health_check():
 #         return jsonify({"status": "error", "database": "disconnected", "error": str(exc)}), 500
 
 if __name__ == "__main__":
-    with app.app_context():
-        # Create all database tables if they don't exist
-        db.create_all()
+    app = create_app()
     app.run(debug=True)
     #app.run(debug=os.getenv("FLASK_ENV") == "development")
-
-# class HealthCheck(db.Model):
-#     __tablename__ = "health_checks"
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     status = db.Column(db.String(50), nullable=False, default="healthy")
