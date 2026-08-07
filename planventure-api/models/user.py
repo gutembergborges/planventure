@@ -13,6 +13,9 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), nullable=False)
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
+    # Add relationship
+    trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
+
     def __repr__(self):
         return f'<User {self.email}>'
 

@@ -18,7 +18,7 @@ class Trip(db.Model):
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
     # relationship to User; backref exposes `trips` on the User model
-    user = db.relationship("User", backref=db.backref("trips", lazy="select"))
+    user = db.relationship("User", back_populates='trips')
 
     def __repr__(self):
         return f"<Trip {self.destination} ({self.start_date} → {self.end_date})>"
