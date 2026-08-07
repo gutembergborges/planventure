@@ -1,5 +1,7 @@
+
 from app import create_app, db
-from models import User
+import models  # ensure all models are imported and registered
+
 
 def init_db():
     # Initialize the database and create tables.
