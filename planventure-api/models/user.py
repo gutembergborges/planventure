@@ -16,20 +16,21 @@ class User(db.Model):
     # Add relationship
     trips = db.relationship('Trip', back_populates='user', cascade='all, delete-orphan')
 
-    def __repr__(self):
-        return f'<User {self.email}>'
+    @property
+    def password(self):
+        raise AttributeError('Password is not a readable attribute')
 
-    def set_password(self, password: str) -> None:
+    @password.setter
+    def password(self, password):
         """Hash and set the user's password."""
-        # store the bcrypt hash as a UTF-8 string
         self.password_hash = hash_password(password)
 
-    def check_password(self, password: str) -> bool:
-        """Return True if the provided password matches the stored hash."""
-        if not self.password_hash:
-            return False
-        return verify_password(password, self.password_hash)
+    def verify_password(self, password):
+        return check_password(password, self.password_hash)
 
+    def __repr__(self):
+        return f'<User {self.email}>'
+    
     def to_dict(self) -> dict:
         return {
             "id": self.id,
