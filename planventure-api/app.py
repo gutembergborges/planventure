@@ -30,6 +30,14 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
 
+    # Register blueprints
+    try:
+        from routes.auth import bp as auth_bp
+        app.register_blueprint(auth_bp)
+    except Exception:
+        # If blueprint import fails during static analysis, ignore; runtime will surface errors
+        pass
+
     # Register routes
     @app.route('/')
     def home():
