@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from app import db
-from utils.auth import hash_password, verify_password
+from utils.password import hash_password, check_password
 
 
 class User(db.Model):
