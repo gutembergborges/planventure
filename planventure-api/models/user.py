@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-
+from flask_jwt_extended import create_access_token
 from app import db
 from utils.password import hash_password, check_password
 
@@ -27,6 +27,15 @@ class User(db.Model):
 
     def verify_password(self, password):
         return check_password(password, self.password_hash)
+
+    def generate_auth_token(self):
+        """Generate JWT token for the user"""
+        return create_access_token(identity=self.id)
+
+    @staticmethod
+    def verify_auth_token(token):
+        """Verify the auth JWT token - handled by @auth_required decorator in routes"""
+        pass
 
     def __repr__(self):
         return f'<User {self.email}>'
