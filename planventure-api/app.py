@@ -32,8 +32,8 @@ def create_app():
 
     # Register blueprints
     try:
-        from routes.auth import bp as auth_bp
-        app.register_blueprint(auth_bp)
+        from routes.auth import auth_bp
+        app.register_blueprint(auth_bp, url_prefix='/auth')
     except Exception:
         # If blueprint import fails during static analysis, ignore; runtime will surface errors
         pass

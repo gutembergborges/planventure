@@ -1,37 +1,39 @@
-import re
-
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token
-
 from app import db
 from models import User
+from utils.validators import validate_email
 
-bp = Blueprint("auth", __name__, url_prefix="/auth")
+auth_bp = Blueprint('auth', __name__)
 
-
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
-
-
-@bp.route("/register", methods=["POST"])
+@auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json() or {}
-    email = (data.get("email") or "").strip().lower()
-    password = data.get("password") or ""
 
-    if not email or not password:
-        return jsonify({"msg": "Email and password are required"}), 400
+    # Validate required fields
+    if not all(k in data for k in ('email', 'password')):
+        return jsonify({'error': 'Missing required fields'}), 400
 
-    if not EMAIL_RE.match(email):
-        return jsonify({"msg": "Invalid email address"}), 400
+    # Validate email format
+    if not validate_email(data['email']):
+        return jsonify({'error': 'Invalid email address format'}), 400
 
-    if User.query.filter_by(email=email).first():
-        return jsonify({"msg": "Email already registered"}), 409
+    # Check if the email and user are already exist
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({'error': 'Email already registered'}), 409
 
-    user = User(email=email)
-    user.password = password
-    db.session.add(user)
-    db.session.commit()
+    # Create a new user
+    try:
+        user = User(email=data['email'])
+        user.password = data['password']    # This will hash the password
+        db.session.add(user)
+        db.session.commit()
 
-    token = create_access_token(identity=user.id)
-
-    return jsonify({"access_token": token, "user": user.to_dict()}), 201
+        # Generate auth JWT token
+        token = user.generate_auth_token()
+        return jsonify({
+            'msg': 'User registered successfully', 
+            'token': token
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Registration failed: Error creating user'}), 500
