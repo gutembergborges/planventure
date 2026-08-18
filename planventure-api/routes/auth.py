@@ -37,3 +37,22 @@ def register():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Registration failed: Error creating user'}), 500
+
+
+@auth_bp.route("/login", methods=["POST"])
+def login():
+    data = request.get_json() or {}
+
+    # Validate required fields
+    if not all(k in data for k in ('email', 'password')):
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    email = data['email']
+    password = data['password']
+
+    user = User.query.filter_by(email=email).first()
+    if user is None or not user.verify_password(password):
+        return jsonify({'error': 'Invalid email or password'}), 401
+
+    token = user.generate_auth_token()
+    return jsonify({'msg': 'Login successful', 'token': token, 'user': user.to_dict()}), 200
