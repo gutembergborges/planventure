@@ -13,7 +13,6 @@ def auth_middleware(f):
             user = User.query.get(current_user_id)
             if not user:
                 return jsonify({'error': 'User not found'}), 401
-            
             return f(*args, **kwargs)
         except Exception as e:
             return jsonify({'error': 'Invalid or missing token'}), 401
