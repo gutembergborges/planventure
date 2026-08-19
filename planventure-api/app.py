@@ -58,6 +58,11 @@ def create_app():
     except Exception:
         # If blueprint import fails during static analysis, ignore; runtime will surface errors
         pass
+    try:
+        from routes.trips import trips_bp
+        app.register_blueprint(trips_bp, url_prefix='/api')
+    except Exception:
+        pass
 
     # Register routes
     @app.route('/')
