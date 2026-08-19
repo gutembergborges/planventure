@@ -14,18 +14,3 @@ def auth_required(f):
 
 def get_current_user_id():
     return get_jwt_identity()
-
-
-def protect_blueprint(bp):
-    """Register a `before_request` handler on a Blueprint to require JWT for all its routes.
-
-    Usage:
-        from utils.auth import protect_blueprint
-        protect_blueprint(my_blueprint)
-    """
-    @bp.before_request
-    def _require_jwt():
-        try:
-            verify_jwt_in_request()
-        except Exception:
-            return jsonify({'msg': 'Invalid or missing token'}), 401
