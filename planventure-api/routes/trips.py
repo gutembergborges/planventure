@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import get_jwt_identity
 
@@ -35,8 +37,8 @@ def create_trip():
     try:
         user_id = get_jwt_identity()
         destination = data['destination']
-        start_date = parse_date(data['start_date'])
-        end_date = parse_date(data['end_date'])
+        start_date = datetime.fromisoformat(data.get('start_date').replace('Z', '+00:00'))
+        end_date = datetime.fromisoformat(data.get('end_date').replace('Z', '+00:00'))
         if start_date is None or end_date is None:
             return jsonify({'error': 'Invalid date format'}), 400
 
