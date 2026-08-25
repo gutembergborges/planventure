@@ -27,21 +27,26 @@ def get_trips():
     ), 200
 
 def create_trip():
-    data = request.get_json() or {}
-
-    # Validate required fields
-    required_fields = ['destination', 'start_date', 'end_date']
-    if not all(field in data for field in required_fields):
-        return jsonify({'error': 'Missing required fields'}), 400
-
     try:
+        data = request.get_json()
         user_id = get_jwt_identity()
+
+        if not user_id:
+            return jsonify({'error': 'Invalid user token'}), 401
+
+        # Rest of the create_trip function remains the same
+        required_fields = ['destination', 'start_date', 'end_date']
+        # Validate required fields
+        if not all(field in data for field in required_fields):
+            return jsonify({'error': 'Missing required fields'}), 400
+
         destination = data['destination']
         start_date = datetime.fromisoformat(data.get('start_date').replace('Z', '+00:00'))
         end_date = datetime.fromisoformat(data.get('end_date').replace('Z', '+00:00'))
         if start_date is None or end_date is None:
             return jsonify({'error': 'Invalid date format'}), 400
 
+        # Generate default itinerary if none provided
         itinerary = data.get('itinerary')
         if not itinerary:
             itinerary = generate_default_itinerary(destination, start_date, end_date)

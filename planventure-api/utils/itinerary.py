@@ -1,28 +1,34 @@
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 
-def generate_default_itinerary(
-    destination: str,
-    start_date: date,
-    end_date: date,
-) -> list[dict[str, Any]]:
-    """Create an empty, dated itinerary template for a trip."""
+def generate_default_itinerary(start_date: datetime, end_date: datetime) -> list[dict[str, Any]]:
+    """Create a default itinerary template for the trip duration"""
     if end_date < start_date:
         raise ValueError("end_date must be on or after start_date")
 
-    itinerary = []
+    itinerary = {}
     current_date = start_date
-    day_number = 1
 
     while current_date <= end_date:
-        itinerary.append({
-            "day": day_number,
-            "date": current_date.isoformat(),
-            "destination": destination,
-            "activities": [],
-        })
+        date_str = current_date.strftime('%Y-%m-%d')
+        itinerary[date_str] = {
+            'activities': [],
+            'meals': {
+                'breakfast': {'time': '08:00', 'place': '', 'notes': ''},
+                'lunch': {'time': '08:00', 'place': '', 'notes': ''},
+                'dinner': {'time': '08:00', 'place': '', 'notes': ''}
+            },
+            'acommodation': {
+                'name': '',
+                'address': '',
+                'check_in': '',
+                'check_out': '',
+                'confirmation': ''
+            },
+            'transportation': [],
+            'notes': ''
+        }
         current_date += timedelta(days=1)
-        day_number += 1
 
     return itinerary
