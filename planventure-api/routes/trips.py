@@ -80,7 +80,7 @@ def get_trip(trip_id):
     trip = Trip.query.get_or_404(trip_id, user_id)
     # trip = Trip.query.filter_by(id=trip_id, user_id=user_id).first()
 
-    if not trip or trip.user_id != user_id:
+    if not trip:
         return jsonify({'error': 'Trip not found'}), 404
     
     return jsonify(trip.to_dict())
@@ -90,7 +90,7 @@ def update_trip(trip_id: int):
     trip = Trip.query.get_or_404(trip_id, user_id)
     # trip = Trip.query.filter_by(id=trip_id, user_id=user_id).first()
 
-    if not trip or trip.user_id != user_id:
+    if not trip:
         return jsonify({'error': 'Trip not found'}), 404
 
     data = request.get_json()
@@ -124,7 +124,7 @@ def delete_trip(trip_id: int):
     user_id = get_jwt_identity()
     trip = Trip.query.get_or_404(trip_id, user_id)
 
-    if not trip or trip.user_id != user_id:
+    if not trip:
         return jsonify({'error': 'Trip not found'}), 404
 
     try:
