@@ -16,7 +16,23 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+
+    # Allow the React development server and configure additional origins via .env.
+    cors_origins = [
+        origin.strip()
+        for origin in environ.get(
+            'CORS_ORIGINS',
+            'http://localhost:3000,http://localhost:5173'
+        ).split(',')
+        if origin.strip()
+    ]
+    CORS(
+        app,
+        resources={r'/api/*': {'origins': cors_origins}, r'/auth/*': {'origins': cors_origins}},
+        methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allow_headers=['Content-Type', 'Authorization'],
+        supports_credentials=True,
+    )
 
     # JWT Configuration
     app.config['JWT_SECRET_KEY'] = environ.get('JWT_SECRET', 'your-secret-key')  # Change this in production
