@@ -1,12 +1,11 @@
-from datetime import datetime
-
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import get_jwt_identity
 
 from app import db
-from models import Trip, User
+from models import Trip
 from middleware.auth import auth_middleware
 from utils.parsers import parse_date
+from utils.itinerary import generate_default_itinerary
 
 trips_bp = Blueprint('trips', __name__)
 
@@ -26,15 +25,7 @@ def get_trips():
     ), 200
 
 def create_trip():
-    data = request.get_json()
-    user_id = get_jwt_identity()
-
-    destination = data['destination']
-    start_date = datetime.fromisoformat(data.get('start_date').replace('Z', '+00:00'))
-    end_date = datetime.fromisoformat(data.get('end_date').replace('Z', '+00:00'))
-    latitude = data.get('latitude')
-    longitude = data.get('longitude')
-    itinerary = data.get('itinerary', {})
+    data = request.get_json() or {}
 
     # Validate required fields
     required_fields = ['destination', 'start_date', 'end_date']
@@ -42,13 +33,24 @@ def create_trip():
         return jsonify({'error': 'Missing required fields'}), 400
 
     try:
+        user_id = get_jwt_identity()
+        destination = data['destination']
+        start_date = parse_date(data['start_date'])
+        end_date = parse_date(data['end_date'])
+        if start_date is None or end_date is None:
+            return jsonify({'error': 'Invalid date format'}), 400
+
+        itinerary = data.get('itinerary')
+        if not itinerary:
+            itinerary = generate_default_itinerary(destination, start_date, end_date)
+
         trip = Trip(
             user_id=user_id,
             destination=destination,
             start_date=start_date,
             end_date=end_date,
-            latitude=latitude,
-            longitude=longitude,
+            latitude=data.get('latitude'),
+            longitude=data.get('longitude'),
             itinerary=itinerary,
         )
 
