@@ -21,18 +21,8 @@ def create_app():
     # JWT Configuration
     app.config['JWT_SECRET_KEY'] = environ.get('JWT_SECRET', 'your-secret-key')  # Change this in production
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
-    # Ensure tokens are read from headers by default
-    app.config.setdefault('JWT_TOKEN_LOCATION', ['headers'])
-
-    # Database configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL', 'sqlite:///planventure.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Initialize extensions
-    db.init_app(app)
     jwt = JWTManager(app)
 
-    # JWT error handlers - return JSON for common JWT failures
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_data):
         return jsonify({
@@ -50,9 +40,16 @@ def create_app():
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return jsonify({
-            'error': 'Missing Authorization Header. Authorization token is missing',
+            'error': 'Authorization token is missing',
             'code': 'authorization_required'
         }), 401
+
+    # Database configuration
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL', 'sqlite:///planventure.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    # Initialize extensions
+    db.init_app(app)
 
     # Register blueprints
     try:
