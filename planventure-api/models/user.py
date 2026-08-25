@@ -30,7 +30,7 @@ class User(db.Model):
 
     def generate_auth_token(self):
         """Generate JWT token for the user"""
-        return create_access_token(identity=self.id)
+        return create_access_token(identity=(str(self.id)))
 
     @staticmethod
     def verify_auth_token(token):
