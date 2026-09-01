@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { 
-  Grid, 
   Typography, 
   Box, 
   Alert,
   Button 
 } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { Add as AddIcon } from '@mui/icons-material';
 import TripCard from './TripCard';
 import { useNavigate } from 'react-router-dom';
@@ -47,7 +47,7 @@ const TripList = ({ WelcomeMessage, ErrorState }) => {
     return (
       <Grid container spacing={3}>
         {[1, 2, 3].map((skeleton) => (
-          <Grid item xs={12} sm={6} md={4} key={skeleton}>
+          <Grid key={skeleton} size={{ xs: 12, sm: 6, md: 4 }}>
             <TripCard loading={true} />
           </Grid>
         ))}
@@ -69,11 +69,11 @@ const TripList = ({ WelcomeMessage, ErrorState }) => {
   return (
     <Grid container spacing={3}>
       {trips.map((trip) => (
-        <Grid item xs={12} sm={6} md={4} key={trip.id}>
+        <Grid key={trip.id} size={{ xs: 12, sm: 6, md: 4 }}>
           <TripCard trip={trip} />
         </Grid>
       ))}
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
         <Button
           variant="outlined"
           fullWidth

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Grid, Paper, Button } from '@mui/material';
+import { Box, Typography, Paper, Button } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import TripList from '../components/trips/TripList';
 import { useAuth } from '../context/AuthContext';
