@@ -16,7 +16,7 @@ import { api } from '../../services/api';
 const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, setIsAuthenticated } = useAuth();
+  const {login} = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
