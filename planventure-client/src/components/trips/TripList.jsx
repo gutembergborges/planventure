@@ -69,7 +69,7 @@ const TripList = ({ WelcomeMessage, ErrorState }) => {
   return (
     <Grid container spacing={3}>
       {trips.map((trip) => (
-        <Grid key={trip.id} size={{ xs: 12, sm: 6, md: 4 }}>
+        <Grid key={trip.id} size={{ xs: 12, sm: 6, md: 4 }} sx={{ minWidth: 234.66 }}>
           <TripCard trip={trip} />
         </Grid>
       ))}
@@ -79,7 +79,8 @@ const TripList = ({ WelcomeMessage, ErrorState }) => {
           fullWidth
           sx={{ 
             height: '100%', 
-            minHeight: 200,
+            minHeight: 151.18,
+            minWidth: 234.66,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
