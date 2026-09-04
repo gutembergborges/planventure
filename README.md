@@ -48,6 +48,10 @@ pip install -r requirements.txt
 ```sh
 cp .sample.env .env
 ```
+or
+```sh
+cp .env.example .env
+```
 
 6. Start the Flask development server:
 ```sh
