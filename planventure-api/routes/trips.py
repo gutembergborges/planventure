@@ -53,7 +53,7 @@ def create_trip():
 
         trip = Trip(
             user_id=user_id,
-            destination=destination,
+            destination=data['title'] + ", " + data['destination'],,
             start_date=start_date,
             end_date=end_date,
             latitude=data.get('latitude'),
@@ -106,7 +106,7 @@ def update_trip(trip_id: int):
 
     try:
         if 'destination' in data:
-            trip.destination = data.get('destination')
+            trip.destination = data.get('destination') + ", " + data.get('destination')
         if 'start_date' in data:
             d = parse_date(data.get('start_date'))
             if d is None:
