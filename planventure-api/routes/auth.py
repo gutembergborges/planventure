@@ -45,24 +45,24 @@ def login():
 
     # Validate required fields
     if not all(k in data for k in ['email', 'password']):
-        return jsonify({'error': 'Missing required fields'}), 400
+        return jsonify(MISSING_FIELDS)
 
-    email = data['email']
-    password = data['password']
+    user = User.query.filter_by(email=data['email']).first()
 
-    # Find user by email
-    user = User.query.filter_by(email=email).first()
+    # Check if the user exists and verify the password to handle correctly error messages for invalid email or password
+    if not user:
+        return jsonify({"error": "This email is not registered"}), 401
 
-    if user and user.verify_password(password):
-        token = user.generate_auth_token()
-        return jsonify({
-            'msg': 'Login successful',
-            'token': token,
-            'user': {   # test -> 'user': user.to_dict()  
-                'id': user.id,
-                'email': user.email
-            }          
-        }), 200
+    if not user.verify_password(data['password']):
+        return jsonify({"error": "Incorrect password"}), 401
 
-    return jsonify(INVALID_CREDENTIALS)
+    token = user.generate_auth_token()
+    return jsonify({
+        'message': 'Login successful',
+        'token': token,
+        'user': {
+            'id': user.id,
+            'email': user.email
+        }
+    }), 200
 
