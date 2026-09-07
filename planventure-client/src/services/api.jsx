@@ -9,22 +9,24 @@ const getAuthHeaders = () => {
 };
 
 const handleResponse = async (response) => {
+  const data = await response.json().catch(() => null);
+
   if (response.status === 401) {
+    const isLoginRequest = response.url && response.url.includes('/auth/login');
+
+    if (isLoginRequest) {
+      throw new Error(data?.error || 'Invalid email or password');
+    }
+
     localStorage.removeItem('token');
     window.location.href = '/login';
     throw new Error('Session expired. Please login again.');
   }
 
-  if (response.status === 404) {
-    throw new Error('Trip not found');
-  }
-
-  const data = await response.json();
   if (!response.ok) {
-    throw new Error(data.error || data.message || 'Request failed');
+    throw new Error(data?.error || data?.message || 'Request failed');
   }
 
-  console.log('API Response:', data); // Debug log
   return data;
 };
 

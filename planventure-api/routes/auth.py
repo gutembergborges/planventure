@@ -47,24 +47,24 @@ def register():
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    
-    # Validate required fields
+
     if not all(k in data for k in ['email', 'password']):
         return jsonify(MISSING_FIELDS)
-    
-    # Find user by email
+
     user = User.query.filter_by(email=data['email']).first()
-    
-    # Verify user exists and password is correct
-    if user and user.verify_password(data['password']):
-        token = user.generate_auth_token()
-        return jsonify({
-            'message': 'Login successful',
-            'token': token,
-            'user': {
-                'id': user.id,
-                'email': user.email
-            }
-        }), 200
-    
-    return jsonify(INVALID_CREDENTIALS)
+
+    if not user:
+        return jsonify({"error": "This email is not registered"}), 401
+
+    if not user.verify_password(data['password']):
+        return jsonify({"error": "Incorrect password"}), 401
+
+    token = user.generate_auth_token()
+    return jsonify({
+        'message': 'Login successful',
+        'token': token,
+        'user': {
+            'id': user.id,
+            'email': user.email
+        }
+    }), 200
