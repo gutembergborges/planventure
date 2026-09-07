@@ -73,7 +73,7 @@ def create_trip():
         
         trip = Trip(
             user_id=user_id,
-            destination=data['destination'],
+            destination=data['title'] + ", " + data['destination'],
             start_date=start_date,
             end_date=end_date,
             latitude=data.get('latitude'),
@@ -161,7 +161,7 @@ def update_trip(trip_id):
     
     try:
         if 'destination' in data:
-            trip.destination = data['destination']
+            trip.destination = data['title'] + ", " + data['destination']
         if 'start_date' in data or 'end_date' in data:
             start_date = datetime.fromisoformat(data.get('start_date', trip.start_date.isoformat()).replace('Z', '+00:00'))
             end_date = datetime.fromisoformat(data.get('end_date', trip.end_date.isoformat()).replace('Z', '+00:00'))
