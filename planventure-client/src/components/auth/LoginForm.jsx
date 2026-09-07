@@ -102,7 +102,17 @@ const LoginForm = () => {
       }
     } catch (err) {
       console.error('Login error:', err);
-      setError(err.message || 'An error occurred during login');
+
+      const message = err.message || 'An error occurred during login';
+      const normalizedMessage = message.toLowerCase();
+
+      if (normalizedMessage.includes('not registered') || normalizedMessage.includes('email')) {
+        setError('This email is not registered. Please sign up first.');
+      } else if (normalizedMessage.includes('password')) {
+        setError('Incorrect password. Please try again.');
+      } else {
+        setError(message);
+      }
     } finally {
       setIsLoading(false);
     }
