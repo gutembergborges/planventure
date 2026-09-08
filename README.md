@@ -2,6 +2,15 @@
 
 A Flask backend API that powers the Planventure travel planning application. This guide will help you quickly get the server running so you can focus on building the client application.
 
+## Prerequisites
+Before you begin, ensure you have the following:
+
+- A GitHub account - [sign up for FREE](https://github.com)
+- Access to GitHub Copilot - [sign up for FREE](https://gh.io/gfb-copilot)!
+- A Code Editor - [VS Code](https://code.visualstudio.com/download) is recommended
+- API Client (like [Bruno](https://github.com/usebruno/bruno))
+- Git - [Download & Install Git](https://git-scm.com/downloads)
+
 ## Quick Start
 
 1. Fork and clone the repository:
@@ -26,14 +35,16 @@ The API server will be running at `http://localhost:5000`
 
 That's it! You can now proceed to set up and work on the client application.
 
-## API Health Check
-
+## API Health Check and API Endpoints
 Verify the server is running:
 ```sh
 curl http://localhost:5000/health
 ```
 
 Expected response: `{"status": "healthy"}`
+
+- GET / - Welcome message
+- GET /health - Health check endpoint
 
 # Planventure Client ✈️
 
